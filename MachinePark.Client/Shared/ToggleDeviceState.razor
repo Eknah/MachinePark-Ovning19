@@ -1,0 +1,31 @@
+﻿@using MachinePark.Services
+@using MachinePark.Shared
+
+@if (Device.IsOnline)
+{
+    <a href="#" @onclick="DoToggleDeviceState" @onclick:preventDefault><span class="text-danger">[Stop]</span></a>
+}
+else
+{
+    <a href="#" @onclick="DoToggleDeviceState" @onclick:preventDefault><span class="text-success">[Start]</span></a>
+}
+
+@code {
+
+    [Inject]
+    public IDevicesClient DevicesClient { get; set; } = default!;
+
+    [Parameter]
+    public Device Device { get; set; }
+
+    [Parameter]
+    public Action<string, bool> UpdateDeviceState { get; set; } = default!;
+
+    private async void DoToggleDeviceState()
+    {
+        var deviceNewState = Device;
+        Device.IsOnline = !Device.IsOnline;
+        await DevicesClient.EditAsync(deviceNewState);
+        UpdateDeviceState(Device.Id, deviceNewState.IsOnline);
+    }
+}

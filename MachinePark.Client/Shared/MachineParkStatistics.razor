@@ -1,0 +1,36 @@
+﻿@using MachinePark.Services
+
+
+<div class="top-row pt-3 ps-0 bg-white shadow-sm">
+    <div class="container-fluid ps-2 ms-2 pb-2 mb-2">
+        <h5>Daily Stats</h5>
+        <ul>
+            <li>Total Devices: @DevicesCount</li>
+            <li>Online Devices: @OnlineDevicesCount</li>
+            <li>Last Edited Machine: @LastEditedMachineName</li>
+        </ul>
+    </div>
+</div>
+
+@code {
+
+    [Inject]
+    public IDevicesClient DevicesClient { get; set; } = default!;
+
+    [Parameter]
+    public int DevicesCount { get; set; }
+
+    [Parameter]
+    public int OnlineDevicesCount { get; set; }
+
+    [Parameter]
+    public string LastEditedMachineName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var devices = await DevicesClient.GetAsync();
+        DevicesCount = devices.Count();
+        OnlineDevicesCount = devices.Count(d => d.IsOnline == true);
+        LastEditedMachineName = devices.Count() > 0 ? devices.OrderBy(d => d.LastUpdated).LastOrDefault().Name : "None";
+    }
+}

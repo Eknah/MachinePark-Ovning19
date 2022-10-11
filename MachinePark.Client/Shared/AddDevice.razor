@@ -1,0 +1,38 @@
+﻿@using MachinePark.Shared
+
+
+<h5>AddDevice</h5>
+
+    <EditForm EditContext="editContext" OnValidSubmit="OnAdd" id="deviceForm" class="py-4 container">
+        <div class="input-group input-group-lg">
+        <InputText @bind-Value="createDevice.Name" type="text" class="form-control" placeholder="Add device..." autofocus></InputText>
+           @* <ValidationMessage For="@(() => createItem.Text)"></ValidationMessage>*@
+           <br />
+            <div class="input-group-append input-group-lg">
+                <button type="submit" class="btn btn-info">Create</button>
+            </div>
+        </div>
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+    </EditForm>
+
+<hr />
+
+@code {
+    private CreateDevice createDevice = new CreateDevice();
+    private EditContext editContext = default!;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(createDevice);
+    }
+
+    [Parameter]
+    public EventCallback<CreateDevice> Add { get; set; }
+
+    public async Task OnAdd()
+    {
+        await Add.InvokeAsync(createDevice);
+        createDevice.Name = string.Empty;
+    }
+}

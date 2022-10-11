@@ -1,0 +1,20 @@
+﻿@page "/dashboard"
+@using MachinePark.Shared
+@using MachinePark.Services
+@inject CurrentPage currentPage
+
+<DevicesList DeviceItems="items"></DevicesList>
+
+@code {
+    private IEnumerable<Device> items = new List<Device>();
+
+    [Inject]
+    public IDevicesClient DevicesClient { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentPage.SetCurrentPageName("Dashboard");
+        currentPage.SetCurrentPageDescription("Overview of your internet of things");
+        items = await DevicesClient.GetAsync();
+    }
+}

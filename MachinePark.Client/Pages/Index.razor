@@ -1,0 +1,15 @@
+﻿@page "/"
+@inject CurrentPage currentPage
+
+<div class="bg-white shadow-sm p-3">
+<span>Management System for a fictional machine park.</span>
+</div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentPage.SetCurrentPageName("Home");
+        currentPage.SetCurrentPageDescription("Welcome");
+    }
+}

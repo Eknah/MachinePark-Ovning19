@@ -1,0 +1,36 @@
+﻿@inherits LayoutComponentBase
+@inject CurrentPage currentPage
+<NavMenu />
+
+<div class="page p-3">
+    <h3>@currentPage.CurrentPageName</h3>
+    <p>@currentPage.CurrentPageDescription</p>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2">
+                <MachineParkStatistics DevicesCount="3" />
+            </div>
+            <div class="col-10">
+                <main>
+                    <article>
+                        @Body
+                    </article>
+                </main>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        // if the OnChange event is raised, refresh this view
+        currentPage.OnChange += () => StateHasChanged();
+
+        base.OnInitialized();
+    }
+}
